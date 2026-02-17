@@ -44,28 +44,34 @@ class ViewController: UIViewController {
     }
     
     @IBAction func calculatePressed(_ sender: Any) {
-        let op1 = Int(operandTextFieldA.text!);
-        let op2 = Int(operandTextFieldB.text!);
-        let op = operatorButton.titleLabel?.text;
+        //let op1 = Int(operandTextFieldA.text!);
+        //let op2 = Int(operandTextFieldB.text!);
+        //let op = operatorButton.titleLabel?.text;
         
-        if (op == "+") {
-            let result = op1! + op2!;
+        if let op1 = operandTextFieldA.text, let op1 = Int(op1), let op2 = operandTextFieldB.text, let op2 = Int(op2), let op = operatorButton.titleLabel?.text {
+            var result : Int? = nil;
+            switch op {
+            case "+":
+                result = op1 + op2;
+                break;
+            case "-":
+                result = op1 - op2;
+                break;
+            case "*":
+                result = op1 * op2;
+                break;
+            case "/":
+                result = op1 / op2;
+                break;
+            default:
+                resultLabel.text = "Invalid operator";
+                break;
+            }
+            
+            guard let result = result else {
+                return;
+            }
             resultLabel.text = "\(result)";
-        }
-        else if (op == "-") {
-            let result = op1! - op2!;
-            resultLabel.text = "\(result)";
-        }
-        else if (op == "*") {
-            let result = op1! * op2!;
-            resultLabel.text = "\(result)";
-        }
-        else if (op == "/") {
-            let result = op1! / op2!;
-            resultLabel.text = "\(result)";
-        }
-        else {
-            resultLabel.text = "Invalid operator";
         }
     }
     override func viewDidLoad() {
