@@ -48,31 +48,53 @@ class ViewController: UIViewController {
         //let op2 = Int(operandTextFieldB.text!);
         //let op = operatorButton.titleLabel?.text;
         
-        if let op1 = operandTextFieldA.text, let op1 = Int(op1), let op2 = operandTextFieldB.text, let op2 = Int(op2), let op = operatorButton.titleLabel?.text {
-            var result : Int? = nil;
-            switch op {
-            case "+":
-                result = op1 + op2;
-                break;
-            case "-":
-                result = op1 - op2;
-                break;
-            case "*":
-                result = op1 * op2;
-                break;
-            case "/":
-                result = op1 / op2;
-                break;
-            default:
-                resultLabel.text = "Invalid operator";
-                break;
-            }
-            
-            guard let result = result else {
-                return;
-            }
-            resultLabel.text = "\(result)";
+        guard let op1 = operandTextFieldA.text, let op1 = Int(op1) else {
+            let alert = UIAlertController(title: "Invalid input", message: "Please enter valid numbers", preferredStyle: .alert);
+            let okAction = UIAlertAction(title: "OK", style: .default);
+            alert.addAction(okAction);
+            present(alert, animated: true);
+            return;
         }
+        
+        guard let op2 = operandTextFieldB.text, let op2 = Int(op2) else {
+            let alert = UIAlertController(title: "Invalid input", message: "Please enter valid numbers", preferredStyle: .alert);
+            let okAction = UIAlertAction(title: "OK", style: .default);
+            alert.addAction(okAction);
+            present(alert, animated: true);
+            return;
+        }
+        
+        guard let op = operatorButton.titleLabel?.text else {
+            return;
+        }
+        
+        var result : Int? = nil;
+        
+        switch op {
+        case "+":
+            result = op1 + op2;
+            break;
+        case "-":
+            result = op1 - op2;
+            break;
+        case "*":
+            result = op1 * op2;
+            break;
+        case "/":
+            result = op1 / op2;
+            break;
+        default:
+            let alert = UIAlertController(title: "Invalid input", message: "Please select an operator.", preferredStyle: .alert);
+            let okAction = UIAlertAction(title: "OK", style: .default);
+            alert.addAction(okAction);
+            present(alert, animated: true);
+            break;
+        }
+        
+        guard let result = result else {
+            return;
+        }
+        resultLabel.text = "\(result)";
     }
     override func viewDidLoad() {
         super.viewDidLoad()
