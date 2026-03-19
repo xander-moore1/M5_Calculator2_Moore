@@ -15,10 +15,8 @@ class ViewController: UIViewController {
     
     @IBAction func operatorPressed(_ sender: Any) {
         let actionSheet = UIAlertController(title:nil, message:nil, preferredStyle: .alert);
-        
-        let plusAction = UIAlertAction(title: "+", style: .default) {_ in
-            self.operatorButton.titleLabel?.text = "+";
-        }
+       
+        let plusAction = UIAlertAction(title: "+", style: .default, handler: {_ in self.operatorButton.setTitle("+", for: .normal)});
         
         actionSheet.addAction(plusAction);
         
