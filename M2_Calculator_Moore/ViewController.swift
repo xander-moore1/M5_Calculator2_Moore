@@ -13,32 +13,33 @@ class ViewController: UIViewController {
     @IBOutlet weak var operatorButton: UIButton!
     @IBOutlet weak var resultLabel: UILabel!
     
+    var selectedOperator: Operator?;
+    
+    
     @IBAction func operatorPressed(_ sender: Any) {
         let actionSheet = UIAlertController(title:nil, message:nil, preferredStyle: .alert);
-        
-        let action = UIAlertAction(title: "+", style: .default) {_ in self.operatorButton.setTitle("+", for: .normal)};
-        
-        UIAlertAction(title: <#T##String?#>, style: <#T##UIAlertAction.Style#>)
        
-        let plusAction = UIAlertAction(title: "+", style: .default, handler: {_ in self.operatorButton.setTitle("+", for: .normal)});
+        let plusAction = UIAlertAction(title: "+", style: .default, handler: {_ in
+            self.operatorButton.setTitle("+", for: .normal);
+            self.selectedOperator = .add; });
         
         actionSheet.addAction(plusAction);
         
-        let minusAction = UIAlertAction(title: "-", style: .default) {_ in
-            self.operatorButton.titleLabel?.text = "-";
-        }
+        let minusAction = UIAlertAction(title: "-", style: .default, handler: {_ in
+            self.operatorButton.setTitle("-", for: .normal);
+            self.selectedOperator = .subtract; });
         
         actionSheet.addAction(minusAction);
         
-        let timesAction = UIAlertAction(title: "*", style: .default) {_ in
-            self.operatorButton.titleLabel?.text = "*";
-        }
+        let timesAction = UIAlertAction(title: "*", style: .default, handler: {_ in
+            self.operatorButton.setTitle("*", for: .normal);
+            self.selectedOperator = .multiply; });
         
         actionSheet.addAction(timesAction);
         
-        let divideAction = UIAlertAction(title: "/", style: .default) {_ in
-            self.operatorButton.titleLabel?.text = "/";
-        }
+        let divideAction = UIAlertAction(title: "/", style: .default, handler: {_ in
+            self.operatorButton.setTitle("/", for: .normal);
+            self.selectedOperator = .divide; });
         
         actionSheet.addAction(divideAction);
         
@@ -46,11 +47,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func calculatePressed(_ sender: Any) {
-        //let op1 = Int(operandTextFieldA.text!);
-        //let op2 = Int(operandTextFieldB.text!);
-        //let op = operatorButton.titleLabel?.text;
-        
-        guard let op1 = operandTextFieldA.text, let op1 = Int(op1) else {
+        guard let op1 = operandTextFieldA.text, let a = Int(op1) else {
             let alert = UIAlertController(title: "Invalid input", message: "Please enter valid numbers", preferredStyle: .alert);
             let okAction = UIAlertAction(title: "OK", style: .default);
             alert.addAction(okAction);
@@ -58,7 +55,7 @@ class ViewController: UIViewController {
             return;
         }
         
-        guard let op2 = operandTextFieldB.text, let op2 = Int(op2) else {
+        guard let op2 = operandTextFieldB.text, let b = Int(op2) else {
             let alert = UIAlertController(title: "Invalid input", message: "Please enter valid numbers", preferredStyle: .alert);
             let okAction = UIAlertAction(title: "OK", style: .default);
             alert.addAction(okAction);
@@ -66,30 +63,24 @@ class ViewController: UIViewController {
             return;
         }
         
-        guard let op = operatorButton.titleLabel?.text else {
+        guard let op = selectedOperator else {
             return;
         }
         
         var result : Int? = nil;
         
         switch op {
-        case "+":
-            result = op1 + op2;
+        case .add:
+            result = a + b;
             break;
-        case "-":
-            result = op1 - op2;
+        case .subtract:
+            result = a - b;
             break;
-        case "*":
-            result = op1 * op2;
+        case .multiply:
+            result = a * b;
             break;
-        case "/":
-            result = op1 / op2;
-            break;
-        default:
-            let alert = UIAlertController(title: "Invalid input", message: "Please select an operator.", preferredStyle: .alert);
-            let okAction = UIAlertAction(title: "OK", style: .default);
-            alert.addAction(okAction);
-            present(alert, animated: true);
+        case .divide:
+            result = a / b;
             break;
         }
         
@@ -97,12 +88,22 @@ class ViewController: UIViewController {
             return;
         }
         resultLabel.text = "\(result)";
+        
+        if operandTextFieldA.isFirstResponder {
+            operandTextFieldA.resignFirstResponder();
+        }
+        else {
+            operandTextFieldB.resignFirstResponder();
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
 
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        operandTextFieldA.becomeFirstResponder();
+    }
 }
 
